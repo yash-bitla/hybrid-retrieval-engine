@@ -18,14 +18,14 @@ packages = ["src/hybrid_retrieval"]
 
 [tool.ruff]
 line-length = 100
-src = ["src", "tests"]
+src = ["src", "tests", "benchmarks"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 
 [tool.mypy]
 strict = true
-files = ["src", "tests"]
+files = ["src", "tests", "benchmarks"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

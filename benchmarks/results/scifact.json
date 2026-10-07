@@ -1,0 +1,32 @@
+{
+  "dataset": "scifact",
+  "num_documents": 5183,
+  "machine": "Darwin arm64, Python 3.12.15",
+  "index_build_s": {
+    "bm25": 0.499
+  },
+  "reports": [
+    {
+      "retriever": "bm25",
+      "dataset": "scifact",
+      "num_queries": 300,
+      "ndcg_at_10": {
+        "mean": 0.6604641499925745,
+        "low": 0.6147322569726396,
+        "high": 0.7053461223526805
+      },
+      "mrr_at_10": {
+        "mean": 0.6269695767195768,
+        "low": 0.5784300925925926,
+        "high": 0.6745180555555554
+      },
+      "recall_at_100": {
+        "mean": 0.8858888888888888,
+        "low": 0.8482222222222222,
+        "high": 0.9196666666666666
+      },
+      "latency_p50_ms": 0.18518749857321382,
+      "latency_p95_ms": 0.3202295149094426
+    }
+  ]
+}
