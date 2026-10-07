@@ -1,0 +1,157 @@
+{
+  "dataset": "scifact",
+  "machine": "Darwin arm64, Python 3.12.15",
+  "first_stage": {
+    "retriever": "hybrid-weighted",
+    "alpha": 0.7,
+    "ndcg_at_10": {
+      "mean": 0.7305024501126546,
+      "low": 0.6882375808866625,
+      "high": 0.771489697486674
+    },
+    "latency_p50_ms": 11.127479505375959,
+    "latency_p95_ms": 12.526308356609661
+  },
+  "rerankers": {
+    "MiniLM-L6 (23M)": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "bge-reranker-base (278M)": "BAAI/bge-reranker-base"
+  },
+  "rows": [
+    {
+      "reranker": "MiniLM-L6 (23M)",
+      "depth": 10,
+      "ndcg_at_10": {
+        "mean": 0.7106369056020165,
+        "low": 0.6683586682171869,
+        "high": 0.7515986740596364
+      },
+      "ndcg_gain": {
+        "mean": -0.019865544510638048,
+        "low": -0.042445484591590046,
+        "high": 0.0018690551124451184
+      },
+      "significant": false,
+      "latency_p50_ms": 62.22110449743923,
+      "latency_p95_ms": 77.05323125264842
+    },
+    {
+      "reranker": "MiniLM-L6 (23M)",
+      "depth": 20,
+      "ndcg_at_10": {
+        "mean": 0.7035175110527128,
+        "low": 0.6603378455362645,
+        "high": 0.7448859790381003
+      },
+      "ndcg_gain": {
+        "mean": -0.026984939059941714,
+        "low": -0.05316486153110811,
+        "high": -0.0012515317336073673
+      },
+      "significant": true,
+      "latency_p50_ms": 130.36185449163895,
+      "latency_p95_ms": 138.63589855172904
+    },
+    {
+      "reranker": "MiniLM-L6 (23M)",
+      "depth": 50,
+      "ndcg_at_10": {
+        "mean": 0.6989458584637481,
+        "low": 0.6557299077226232,
+        "high": 0.741547290691104
+      },
+      "ndcg_gain": {
+        "mean": -0.03155659164890649,
+        "low": -0.05990331946340035,
+        "high": -0.004079720449105909
+      },
+      "significant": true,
+      "latency_p50_ms": 260.62289548281115,
+      "latency_p95_ms": 293.42348604404833
+    },
+    {
+      "reranker": "MiniLM-L6 (23M)",
+      "depth": 100,
+      "ndcg_at_10": {
+        "mean": 0.6895817233029803,
+        "low": 0.6458069979579201,
+        "high": 0.7330249058815779
+      },
+      "ndcg_gain": {
+        "mean": -0.04092072680967426,
+        "low": -0.07037397857260383,
+        "high": -0.012924849643917118
+      },
+      "significant": true,
+      "latency_p50_ms": 442.7961875044275,
+      "latency_p95_ms": 503.0329378671013
+    },
+    {
+      "reranker": "bge-reranker-base (278M)",
+      "depth": 10,
+      "ndcg_at_10": {
+        "mean": 0.7337122662502412,
+        "low": 0.6920694293813805,
+        "high": 0.7740824056176352
+      },
+      "ndcg_gain": {
+        "mean": 0.0032098161375866525,
+        "low": -0.017531209960032382,
+        "high": 0.023266820474942666
+      },
+      "significant": false,
+      "latency_p50_ms": 312.05014549777843,
+      "latency_p95_ms": 313.7025479154545
+    },
+    {
+      "reranker": "bge-reranker-base (278M)",
+      "depth": 20,
+      "ndcg_at_10": {
+        "mean": 0.7285288368634556,
+        "low": 0.6870133866253736,
+        "high": 0.7683902503623465
+      },
+      "ndcg_gain": {
+        "mean": -0.001973613249198943,
+        "low": -0.025515711011890235,
+        "high": 0.02133507661585196
+      },
+      "significant": false,
+      "latency_p50_ms": 610.3940835164394,
+      "latency_p95_ms": 630.6541666970588
+    },
+    {
+      "reranker": "bge-reranker-base (278M)",
+      "depth": 50,
+      "ndcg_at_10": {
+        "mean": 0.7202716571187953,
+        "low": 0.6783612814645759,
+        "high": 0.760395373220596
+      },
+      "ndcg_gain": {
+        "mean": -0.010230792993859197,
+        "low": -0.03601306341663345,
+        "high": 0.015453048901473535
+      },
+      "significant": false,
+      "latency_p50_ms": 1367.9881045100046,
+      "latency_p95_ms": 1506.6169267971418
+    },
+    {
+      "reranker": "bge-reranker-base (278M)",
+      "depth": 100,
+      "ndcg_at_10": {
+        "mean": 0.7097907825984375,
+        "low": 0.666926405332345,
+        "high": 0.7509595596674757
+      },
+      "ndcg_gain": {
+        "mean": -0.020711667514216995,
+        "low": -0.04870058808118514,
+        "high": 0.006224238696211332
+      },
+      "significant": false,
+      "latency_p50_ms": 2634.860395497526,
+      "latency_p95_ms": 2900.8975767414086
+    }
+  ]
+}
