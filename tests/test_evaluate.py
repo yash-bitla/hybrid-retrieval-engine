@@ -1,7 +1,7 @@
 import pytest
 
 from hybrid_retrieval.beir import Dataset
-from hybrid_retrieval.evaluate import bootstrap_ci, evaluate, to_markdown
+from hybrid_retrieval.evaluate import bootstrap_ci, evaluate, paired_bootstrap, to_markdown
 
 
 class FixedRetriever:
@@ -65,3 +65,34 @@ def test_markdown_has_one_row_per_report() -> None:
     table = to_markdown([evaluate(retriever, DATASET, name="fixed")])
     assert len(table.splitlines()) == 3
     assert "| fixed | tiny | 2 | 1.000 [1.000, 1.000]" in table
+
+
+def test_paired_bootstrap_detects_a_consistent_small_gain() -> None:
+    # The candidate is 0.05 better on every query. The two separate intervals overlap
+    # heavily, but the per-query difference is constant, so its interval has zero width.
+    baseline = [0.0, 0.2, 0.4, 0.6, 0.8] * 4
+    candidate = [b + 0.05 for b in baseline]
+    diff = paired_bootstrap(candidate, baseline)
+    assert diff.mean == pytest.approx(0.05)
+    assert diff.low == pytest.approx(0.05)
+    assert diff.high == pytest.approx(0.05)
+    assert bootstrap_ci(candidate).low < bootstrap_ci(baseline).high
+
+
+def test_paired_bootstrap_of_noise_includes_zero() -> None:
+    baseline = [0.5] * 40
+    candidate = [0.6, 0.4] * 20
+    diff = paired_bootstrap(candidate, baseline)
+    assert diff.mean == pytest.approx(0.0)
+    assert diff.low < 0.0 < diff.high
+
+
+def test_paired_bootstrap_rejects_different_query_sets() -> None:
+    with pytest.raises(ValueError):
+        paired_bootstrap([0.1, 0.2], [0.1])
+
+
+def test_report_keeps_per_query_scores_in_dataset_order() -> None:
+    retriever = FixedRetriever({"first": ["a", "x"], "second": ["x", "b"]})
+    report = evaluate(retriever, DATASET, name="fixed")
+    assert report.ndcg_per_query == pytest.approx((1.0, 0.63093), abs=1e-5)

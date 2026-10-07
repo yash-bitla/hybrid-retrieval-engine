@@ -1,6 +1,6 @@
 import time
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Protocol
 
 import numpy as np
@@ -33,6 +33,8 @@ class Report:
     recall_at_100: Estimate
     latency_p50_ms: float
     latency_p95_ms: float
+    # Per-query nDCG@10 in dataset order, kept so two reports can be compared query by query.
+    ndcg_per_query: tuple[float, ...] = field(default=(), repr=False)
 
 
 def bootstrap_ci(
@@ -80,7 +82,27 @@ def evaluate(retriever: Retriever, dataset: Dataset, name: str, depth: int = 100
         recall_at_100=bootstrap_ci(recalls),
         latency_p50_ms=float(p50),
         latency_p95_ms=float(p95),
+        ndcg_per_query=tuple(ndcgs),
     )
+
+
+def paired_bootstrap(
+    candidate: Sequence[float],
+    baseline: Sequence[float],
+    resamples: int = 10_000,
+    confidence: float = 0.95,
+    seed: int = 0,
+) -> Estimate:
+    """Mean per-query difference (candidate - baseline) with a bootstrap interval.
+
+    Both systems are scored on the same queries, so the difference is resampled per query.
+    This removes the query-difficulty noise that makes two separate intervals overlap.
+    If the interval excludes 0, the difference is significant at the given confidence.
+    """
+    if len(candidate) != len(baseline):
+        raise ValueError("both systems must be scored on the same queries")
+    diffs = np.asarray(candidate, dtype=np.float64) - np.asarray(baseline, dtype=np.float64)
+    return bootstrap_ci(diffs, resamples=resamples, confidence=confidence, seed=seed)
 
 
 def _cell(e: Estimate) -> str:
