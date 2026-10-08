@@ -8,12 +8,13 @@ version = "0.1.0"
 description = "BM25, dense retrieval and reranking with an evaluation harness"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["numpy>=1.26"]
+dependencies = ["numpy>=1.26", "numba>=0.60"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.11"]
 dense = ["sentence-transformers>=3"]
 bench = ["matplotlib>=3.8"]
+ann = ["faiss-cpu>=1.8"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hybrid_retrieval"]
@@ -30,7 +31,7 @@ strict = true
 files = ["src", "tests", "benchmarks"]
 
 [[tool.mypy.overrides]]
-module = ["sentence_transformers", "torch", "torch.*", "matplotlib", "matplotlib.*"]
+module = ["sentence_transformers", "torch", "torch.*", "matplotlib", "matplotlib.*", "numba", "faiss"]
 ignore_missing_imports = true
 follow_imports = "skip"
 
