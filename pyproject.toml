@@ -7,6 +7,9 @@ name = "hybrid-retrieval"
 version = "0.1.0"
 description = "BM25, dense retrieval and reranking with an evaluation harness"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Yash Bitla" }]
 requires-python = ">=3.12"
 dependencies = ["numpy>=1.26", "numba>=0.60"]
 
