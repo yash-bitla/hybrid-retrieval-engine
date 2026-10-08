@@ -11,7 +11,34 @@ The common advice is "add hybrid search and a reranker". This project tests each
 - **MaxScore pruning returns the same BM25 results 2.5 to 9.6 times faster** (P50, top 10), and the gain grows with corpus size.
 - **Approximate search (HNSW) is not worth it at 57,000 documents.** It makes the vector search 4.5 times faster and the whole query 13% faster, because the query encoder dominates.
 
+![nDCG@10 against P95 latency for two rerankers at four depths. Both lines fall as depth grows, and only one point is above the first-stage line.](benchmarks/results/scifact-rerank.png)
+
+*Reranking on SciFact. Each point is one rerank depth. The dashed line is the first stage with no reranker. Details are in [Reranking](#reranking).*
+
 Every number below comes from a script in [`benchmarks/`](benchmarks), and the raw output is in [`benchmarks/results/`](benchmarks/results).
+
+## Quick start
+
+Reproduce the first number in the tables below (BM25 on SciFact, 0.660 nDCG@10) in about a minute. It needs no model and no GPU, and it downloads one small dataset.
+
+```bash
+git clone https://github.com/yash-bitla/hybrid-retrieval-engine.git && cd hybrid-retrieval-engine
+python3.12 -m venv .venv && source .venv/bin/activate && pip install -e .
+```
+
+```python
+from pathlib import Path
+
+from hybrid_retrieval import BM25Index
+from hybrid_retrieval.beir import download, load
+from hybrid_retrieval.evaluate import evaluate, to_markdown
+
+dataset = load(download("scifact", Path("data")))
+index = BM25Index(list(dataset.corpus), list(dataset.corpus.values()))
+print(to_markdown([evaluate(index, dataset, name="bm25")]))
+```
+
+The commands for every other table are in [Reproduce](#reproduce).
 
 ## Datasets
 
@@ -67,9 +94,7 @@ The intervals in those tables overlap, so they cannot say which retriever is bet
 
 ## Reranking
 
-A cross-encoder rescores the top candidates of the best first stage (the weighted hybrid). Two models, four rerank depths, the 300 SciFact queries. The gain column is a paired bootstrap against the first stage.
-
-![nDCG@10 against P95 latency for two rerankers at four depths. Both lines fall as depth grows, and only one point is above the first-stage line.](benchmarks/results/scifact-rerank.png)
+A cross-encoder rescores the top candidates of the best first stage (the weighted hybrid). Two models, four rerank depths, the 300 SciFact queries. The gain column is a paired bootstrap against the first stage. The chart at the top of this page plots this table.
 
 | Reranker | Depth | nDCG@10 | Gain over first stage | Significant | P50 ms | P95 ms |
 |---|---:|---|---|---|---:|---:|
@@ -182,3 +207,7 @@ python -m benchmarks.ann --dataset fiqa
 pip install -e ".[dev]"
 pytest && ruff check . && mypy
 ```
+
+## License
+
+[MIT](LICENSE)
