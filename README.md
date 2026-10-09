@@ -17,6 +17,8 @@ The common advice is "add hybrid search and a reranker". This project tests each
 
 Every number below comes from a script in [`benchmarks/`](benchmarks), and the raw output is in [`benchmarks/results/`](benchmarks/results).
 
+The story behind these results is in the blog post [Your RAG search may not need a reranker. Here is how I checked mine.](https://yashbitla.com/blog/testing-hybrid-search-advice/)
+
 ## Quick start
 
 Reproduce the first number in the tables below (BM25 on SciFact, 0.660 nDCG@10) in about a minute. It needs no model and no GPU, and it downloads one small dataset.
